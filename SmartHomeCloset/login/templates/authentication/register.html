@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'login/css/login.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="screen-1">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="300" viewbox="0 0 640 480" xml:space="preserve">
+            <!-- Your SVG logo content here -->
+        </svg>
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            
+            <!-- Add error messages section -->
+            {% if form.errors %}
+                <div class="error-messages">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="email">
+                <label for="username">Username</label>
+                <div class="sec-2">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <input type="text" name="username" id="username" placeholder="Username" required/>
+                </div>
+            </div>
+            <div class="password">
+                <label for="password1">Password</label>
+                <div class="sec-2">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <input class="pas" type="password" name="password1" id="password1" placeholder="············" required/>
+                    <ion-icon class="show-hide" name="eye-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="password">
+                <label for="password2">Confirm Password</label>
+                <div class="sec-2">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <input class="pas" type="password" name="password2" id="password2" placeholder="············" required/>
+                    <ion-icon class="show-hide" name="eye-outline"></ion-icon>
+                </div>
+            </div>
+            <button type="submit" class="login">Register</button>
+            <div class="footer">
+                <a href="{% url 'login' %}">Already have an account? Login</a>
+            </div>
+            
+        </form>
+    </div>
+</body>
+</html> 
