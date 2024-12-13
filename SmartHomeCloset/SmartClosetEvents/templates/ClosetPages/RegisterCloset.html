@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Closet</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="screen-1">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="300" viewbox="0 0 640 480" xml:space="preserve">
+            <!-- Your SVG logo content here -->
+        </svg>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if messages %}
+                <div class="error-messages">
+                    {% for message in messages %}
+                        <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="input-field">
+                <label for="closet_name">Closet Name</label>
+                <div class="sec-2">
+                    <ion-icon name="home-outline"></ion-icon>
+                    <input type="text" name="closet_name" id="closet_name" placeholder="Master Bedroom Closet" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="closet_type">Closet Type</label>
+                <div class="sec-2">
+                    <ion-icon name="file-tray-outline"></ion-icon>
+                    <input type="text" name="closet_type" id="closet_type" placeholder="Walk-in/Standard" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="closet_location">Location</label>
+                <div class="sec-2">
+                    <ion-icon name="location-outline"></ion-icon>
+                    <input type="text" name="closet_location" id="closet_location" placeholder="Master Bedroom" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="closet_size">Size</label>
+                <div class="sec-2">
+                    <ion-icon name="resize-outline"></ion-icon>
+                    <input type="text" name="closet_size" id="closet_size" placeholder="10x12" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="closet_color">Color</label>
+                <div class="sec-2">
+                    <ion-icon name="color-palette-outline"></ion-icon>
+                    <input type="text" name="closet_color" id="closet_color" placeholder="White" required/>
+                </div>
+            </div>
+
+            <button type="submit" class="login">Register Closet</button>
+            <div class="footer">
+                <a href="{% url 'homepage' %}">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

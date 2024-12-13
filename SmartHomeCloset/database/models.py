@@ -21,7 +21,6 @@ class ClothingItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     clothing_item_id = models.AutoField(primary_key=True)
     clothing_item_name = models.CharField(max_length=255)
-    clothing_item_file_path = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'clothing_item'
@@ -35,7 +34,7 @@ class ClosetStatus(models.Model):
     closet = models.ForeignKey(ClosetInfo, on_delete=models.CASCADE)
     hanger_number = models.IntegerField()
     clothing_item = models.ForeignKey(ClothingItem, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True)
+    in_closet = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'closet_status'
@@ -48,6 +47,7 @@ class OutfitInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     outfit_id = models.AutoField(primary_key=True)
     outfit_name = models.CharField(max_length=255)
+    outfit_pic_file_path = models.ImageField(upload_to='outfits/', default='outfits/default.jpg')
     clothing_items = models.ManyToManyField(ClothingItem)
 
     class Meta:

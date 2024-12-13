@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Fits</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="screen-1">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="300" viewbox="0 0 640 480" xml:space="preserve">
+            <!-- Your SVG logo content here -->
+        </svg>
+
+        <div class="fits-container">
+            <h1>My Fits</h1>
+
+            <!-- Closet Selection Form -->
+            <form method="GET" action="" class="closet-select-form">
+                <div class="input-field">
+                    <label for="closet">Select Closet:</label>
+                    <div class="sec-2">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <select name="closet" id="closet" onchange="window.location.href='/SmartClosetEvents/get_outfits/' + this.value + '/'">
+                            <option value="">Choose a closet...</option>
+                            {% for closet in closets %}
+                                <option value="{{ closet.closet_id }}" 
+                                    {% if closet.closet_id == request.resolver_match.kwargs.closet_id %}selected{% endif %}>
+                                    {{ closet.closet_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            {% if available_outfits %}
+                <div class="outfits-section">
+                    <h2>Available Outfits</h2>
+                    <div class="outfits-grid">
+                        {% for outfit in available_outfits %}
+                            <div class="outfit-card">
+                                <img src="{{ outfit.outfit_pic_file_path.url }}" alt="{{ outfit.outfit_name }}">
+                                <h3>{{ outfit.outfit_name }}</h3>
+                                <div class="outfit-items">
+                                    <h4>Items:</h4>
+                                    <ul>
+                                        {% for item in outfit.clothing_items.all %}
+                                            <li>{{ item.clothing_item_name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if affected_outfits %}
+                <div class="outfits-section affected">
+                    <h2>Unavailable Outfits</h2>
+                    <div class="outfits-grid">
+                        {% for outfit in affected_outfits %}
+                            <div class="outfit-card unavailable">
+                                <img src="{{ outfit.outfit_pic_file_path.url }}" alt="{{ outfit.outfit_name }}">
+                                <h3>{{ outfit.outfit_name }}</h3>
+                                <div class="outfit-items">
+                                    <h4>Items:</h4>
+                                    <ul>
+                                        {% for item in outfit.clothing_items.all %}
+                                            <li>{{ item.clothing_item_name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if not available_outfits and not affected_outfits and request.resolver_match.kwargs.closet_id %}
+                <p class="no-outfits">No outfits found for this closet.</p>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <a href="{% url 'homepage' %}">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        function checkForUpdates() {
+            const closetId = document.getElementById('closet').value;
+            if (closetId) {
+                $.ajax({
+                    url: `/SmartClosetEvents/check_updates/${closetId}/`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.updated) {
+                            // Refresh the outfits display
+                            window.location.href = `/SmartClosetEvents/get_outfits/${closetId}/`;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Check for updates every 5 seconds
+        setInterval(checkForUpdates, 5000);
+    </script>
+</body>
+</html>

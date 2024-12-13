@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Outfit</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="screen-1">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="300" viewbox="0 0 640 480" xml:space="preserve">
+            <!-- Your SVG logo content here -->
+        </svg>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if messages %}
+                <div class="error-messages">
+                    {% for message in messages %}
+                        <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="input-field">
+                <label for="outfit_name">Outfit Name</label>
+                <div class="sec-2">
+                    <ion-icon name="shirt-outline"></ion-icon>
+                    <input type="text" name="outfit_name" id="outfit_name" placeholder="Summer Casual" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="outfit_pic">Outfit Picture</label>
+                <div class="sec-2">
+                    <ion-icon name="image-outline"></ion-icon>
+                    <input type="file" name="outfit_pic" id="outfit_pic" accept="image/*" required/>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="clothing_items">Select Clothing Items</label>
+                <div class="sec-2">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <select name="clothing_items" id="clothing_items" multiple required>
+                        {% for item in clothing_items %}
+                            <option value="{{ item.clothing_item_id }}">{{ item.clothing_item_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="login">Register Outfit</button>
+            <div class="footer">
+                <a href="{% url 'homepage' %}">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html> 

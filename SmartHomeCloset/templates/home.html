@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" href="{% static 'login/css/login.css' %}">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
@@ -16,6 +16,24 @@
         <div class="welcome-text">
             {% if user.is_authenticated %}
                 <h1>Welcome, {{ user.username }}!</h1>
+                <div class="dashboard-nav">
+                    <a href="{% url 'RegisterCloset' %}" class="dashboard-button">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <span>Register a Closet</span>
+                    </a>
+                    <a href="{% url 'RegisterClothing' %}" class="dashboard-button">
+                        <ion-icon name="shirt-outline"></ion-icon>
+                        <span>Add Clothing</span>
+                    </a>
+                    <a href="{% url 'RegisterOutfit' %}" class="dashboard-button">
+                        <ion-icon name="create-outline"></ion-icon>
+                        <span>Create Outfit</span>
+                    </a>
+                    <a href="{% url 'Fits' %}" class="dashboard-button">
+                        <ion-icon name="albums-outline"></ion-icon>
+                        <span>Customize my Fit</span>
+                    </a>
+                </div>
             {% else %}
                 <h1>Welcome to Smart Home Closet</h1>
             {% endif %}

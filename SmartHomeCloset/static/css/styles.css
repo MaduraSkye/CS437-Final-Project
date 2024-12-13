@@ -1,0 +1,331 @@
+* {
+  font-family: "Poppins";
+}
+
+body {
+  -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow-y: auto;
+  min-height: 100vh;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dde5f4;
+}
+
+.screen-1 {
+  background: #f1f7fe;
+  padding: 3em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  box-shadow: 0 0 2em #e6e9f9;
+  gap: 2em;
+  width: 100%;
+  max-width: 800px;
+  margin: 1em;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.screen-1 .logo {
+  margin-top: -3em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.screen-1 .input-field, .screen-1 .password {
+  background: white;
+  box-shadow: 0 0 2em #e6e9f9;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  border-radius: 20px;
+  color: #4d4d4d;
+  width: 100%;
+  max-width: 350px;
+}
+
+.screen-1 .input-field .sec-2, .screen-1 .password .sec-2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.screen-1 .input-field input, .screen-1 .password input {
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: 1.1em;
+}
+
+.screen-1 .password .show-hide {
+  margin-left: auto;
+}
+
+.screen-1 .login {
+  padding: 1em;
+  background: #3e4684;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  margin: 1em 0;
+  width: 80%;
+  font-size: 1.1em;
+}
+
+.screen-1 label {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.screen-1 .footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #5e5e5e;
+  width: 100%;
+  padding: 1em 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+
+.errorlist {
+    color: red;
+    list-style: none;
+    padding: 0;
+    margin: 0.5em 0;
+    text-align: center;
+}
+
+.messages {
+    color: green;
+    list-style: none;
+    padding: 0;
+    margin: 0.5em 0;
+    text-align: center;
+}
+
+.error-messages {
+    width: 100%;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+
+.welcome-text {
+    text-align: center;
+    margin: 1em 0;
+}
+
+.welcome-text h1 {
+    color: #3e4684;
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.auth-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+}
+
+.auth-buttons form {
+    width: 100%;
+    max-width: 200px;
+}
+
+.login-link {
+    width: 100%;
+    max-width: 200px;
+    text-decoration: none;
+}
+
+.login-link button {
+    width: 100%;
+}
+
+.dashboard-nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5em;
+  width: 80%;
+  max-width: 600px;
+  padding: 1em;
+}
+
+.dashboard-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+  background: white;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #3e4684;
+  box-shadow: 0 0 2em #e6e9f9;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 90%;
+}
+
+.dashboard-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 2em #e6e9f9;
+}
+
+.dashboard-button ion-icon {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.dashboard-button span {
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.screen-1 .input-field select {
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 1.1em;
+    background: white;
+    color: #4d4d4d;
+}
+
+.screen-1 .input-field select option {
+    color: #4d4d4d;
+    padding: 0.5em;
+}
+
+.screen-1 .input-field input[type="file"] {
+    padding: 0.5em;
+}
+
+.screen-1 .input-field select[multiple] {
+    height: 150px;
+    padding: 0.5em;
+}
+
+.screen-1 .input-field select[multiple] option {
+    padding: 0.5em;
+    border-bottom: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+  .dashboard-nav {
+      grid-template-columns: 1fr;
+      gap: 1.5em;
+      padding: 1em;
+  }
+  
+  .screen-1 {
+      padding: 2em 1em;
+  }
+}
+
+/* Fits page specific styles */
+.fits-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.closet-select-form {
+    margin: 2em 0;
+    max-width: 400px;
+}
+
+.outfits-section {
+    margin: 2em 0;
+}
+
+.outfits-section h2 {
+    color: #3e4684;
+    margin-bottom: 1em;
+}
+
+.outfits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2em;
+    padding: 1em;
+}
+
+.outfit-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1em;
+    box-shadow: 0 0 2em #e6e9f9;
+}
+
+.outfit-card.unavailable {
+    opacity: 0.7;
+    background: #f8f9fa;
+}
+
+.outfit-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1em;
+}
+
+.outfit-card h3 {
+    color: #3e4684;
+    margin: 0.5em 0;
+}
+
+.outfit-items {
+    margin-top: 1em;
+}
+
+.outfit-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.outfit-items li {
+    padding: 0.3em 0;
+    color: #666;
+}
+
+.no-outfits {
+    text-align: center;
+    color: #666;
+    margin: 2em 0;
+}
+
+.affected h2 {
+    color: #dc3545;
+}
