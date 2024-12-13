@@ -5,6 +5,7 @@ from database.models import ClosetInfo, ClothingItem, ClosetStatus, OutfitInfo
 from django.contrib.messages.storage.base import Message
 import json
 from django.http import JsonResponse
+import os
 
 @login_required
 def register_closet(request):
@@ -27,7 +28,6 @@ def register_closet(request):
         except Exception as e:
             messages.error(request, f"Error registering closet: {str(e)}")
             return render(request, 'ClosetPages/RegisterCloset.html')
-    
     return render(request, 'ClosetPages/RegisterCloset.html')
 
 @login_required
@@ -41,13 +41,6 @@ def register_clothing(request):
     
     if request.method == "POST":
         try:
-            # Create new clothing item (removed file_path)
-            new_clothing = ClothingItem(
-                user=request.user,
-                clothing_item_name=request.POST['clothing_name']
-            )
-            new_clothing.save()
-            
             # Create closet status entry
             closet = ClosetInfo.objects.get(closet_id=request.POST['closet_id'])
             status = ClosetStatus(
@@ -55,15 +48,26 @@ def register_clothing(request):
                 closet=closet,
                 clothing_item=new_clothing,
                 hanger_number=request.POST['hanger_number'],
-                status=True
+                in_closet=True
             )
             status.save()
+            
+            # Create new clothing item (removed file_path)
+            new_clothing = ClothingItem(
+                user=request.user,
+                clothing_item_name=request.POST['clothing_name']
+            )
+            new_clothing.save()
             
             messages.success(request, "Clothing item registered successfully!")
             return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
         
         except Exception as e:
-            messages.error(request, f"Error registering clothing: {str(e)}")
+            if "duplicate key value" in str(e):
+                messages.error(request, "Hanger is Already taken by another Clothing Item.\
+                               Please remove the clothing item, or specify a new hanger.")
+            else:
+                messages.error(request, f"Error registering clothing: {str(e)}")
             return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
     
     return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
@@ -143,6 +147,13 @@ def register_outfit(request):
             # Handle the uploaded file
             outfit_pic = request.FILES.get('outfit_pic')
             
+            # Get selected clothing items
+            selected_items = request.POST.getlist('clothing_items')
+            
+            if not selected_items:
+                messages.error(request, "Please select at least one clothing item for the outfit.")
+                return render(request, 'ClosetPages/RegisterOutfit.html', {'clothing_items': user_clothing})
+            
             # Create new outfit
             new_outfit = OutfitInfo(
                 user=request.user,
@@ -152,13 +163,12 @@ def register_outfit(request):
             new_outfit.save()
             
             # Add selected clothing items to the outfit
-            selected_items = request.POST.getlist('clothing_items')
             for item_id in selected_items:
                 clothing_item = ClothingItem.objects.get(clothing_item_id=item_id)
                 new_outfit.clothing_items.add(clothing_item)
             
             messages.success(request, "Outfit registered successfully!")
-            return render(request, 'ClosetPages/RegisterOutfit.html', {'clothing_items': user_clothing})
+            return redirect('RegisterOutfit')
         
         except Exception as e:
             messages.error(request, f"Error registering outfit: {str(e)}")
@@ -190,3 +200,85 @@ def check_updates(request, closet_id):
         
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+@login_required
+def remove_clothing(request):
+    # Get user's clothing items
+    user_clothing = ClothingItem.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        try:
+            # Get selected clothing items to remove
+            items_to_remove = request.POST.getlist('clothing_items')
+            
+            # Delete selected items
+            ClothingItem.objects.filter(
+                user=request.user,
+                clothing_item_id__in=items_to_remove
+            ).delete()
+            
+            messages.success(request, "Selected clothing items removed successfully!")
+            return redirect('RemoveClothing')
+            
+        except Exception as e:
+            messages.error(request, f"Error removing clothing items: {str(e)}")
+    
+    return render(request, 'ClosetPages/RemoveClothing.html', {'clothing_items': user_clothing})
+
+@login_required
+def remove_closet(request):
+    # Get user's closets
+    user_closets = ClosetInfo.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        try:
+            # Get selected closets to remove
+            closets_to_remove = request.POST.getlist('closets')
+            
+            # Delete selected closets
+            ClosetInfo.objects.filter(
+                user=request.user,
+                closet_id__in=closets_to_remove
+            ).delete()
+            
+            messages.success(request, "Selected closets removed successfully!")
+            return redirect('RemoveCloset')
+            
+        except Exception as e:
+            messages.error(request, f"Error removing closets: {str(e)}")
+    
+    return render(request, 'ClosetPages/RemoveCloset.html', {'closets': user_closets})
+
+@login_required
+def remove_outfit(request):
+    # Get user's outfits
+    user_outfits = OutfitInfo.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        try:
+            # Get selected outfits to remove
+            outfits_to_remove = request.POST.getlist('outfits')
+            
+            # Get the outfits and their image paths before deletion
+            outfits = OutfitInfo.objects.filter(
+                user=request.user,
+                outfit_id__in=outfits_to_remove
+            )
+            
+            # Delete image files
+            for outfit in outfits:
+                if outfit.outfit_pic_file_path and outfit.outfit_pic_file_path.name != 'outfits/default.jpg':
+                    # Delete the physical file if it exists
+                    if os.path.isfile(outfit.outfit_pic_file_path.path):
+                        os.remove(outfit.outfit_pic_file_path.path)
+            
+            # Delete the outfit records
+            outfits.delete()
+            
+            messages.success(request, "Selected outfits removed successfully!")
+            return redirect('RemoveOutfit')
+            
+        except Exception as e:
+            messages.error(request, f"Error removing outfits: {str(e)}")
+    
+    return render(request, 'ClosetPages/RemoveOutfit.html', {'outfits': user_outfits})

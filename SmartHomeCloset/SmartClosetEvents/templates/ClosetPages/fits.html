@@ -15,26 +15,28 @@
         </svg>
 
         <div class="fits-container">
-            <h1>My Fits</h1>
+            <div class="fits-header">
+                <h1>My Fits</h1>
 
-            <!-- Closet Selection Form -->
-            <form method="GET" action="" class="closet-select-form">
-                <div class="input-field">
-                    <label for="closet">Select Closet:</label>
-                    <div class="sec-2">
-                        <ion-icon name="home-outline"></ion-icon>
-                        <select name="closet" id="closet" onchange="window.location.href='/SmartClosetEvents/get_outfits/' + this.value + '/'">
-                            <option value="">Choose a closet...</option>
-                            {% for closet in closets %}
-                                <option value="{{ closet.closet_id }}" 
-                                    {% if closet.closet_id == request.resolver_match.kwargs.closet_id %}selected{% endif %}>
-                                    {{ closet.closet_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                <!-- Closet Selection Form -->
+                <form method="GET" action="" class="closet-select-form">
+                    <div class="input-field">
+                        <label for="closet">Select Closet:</label>
+                        <div class="sec-2">
+                            <ion-icon name="home-outline"></ion-icon>
+                            <select name="closet" id="closet" onchange="window.location.href='/SmartClosetEvents/get_outfits/' + this.value + '/'">
+                                <option value="">Choose a closet...</option>
+                                {% for closet in closets %}
+                                    <option value="{{ closet.closet_id }}" 
+                                        {% if closet.closet_id == request.resolver_match.kwargs.closet_id %}selected{% endif %}>
+                                        {{ closet.closet_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
 
             {% if available_outfits %}
                 <div class="outfits-section">

@@ -38,7 +38,10 @@ class ClosetStatus(models.Model):
 
     class Meta:
         db_table = 'closet_status'
-        unique_together = (('user', 'closet', 'hanger_number', 'clothing_item'),)
+        unique_together = [
+            ('user', 'closet', 'clothing_item'),
+            ('closet', 'hanger_number'),
+        ]
 
     def __str__(self):
         return f"Hanger {self.hanger_number} in {self.closet.closet_name}"

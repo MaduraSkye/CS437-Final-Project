@@ -33,6 +33,18 @@
                         <ion-icon name="albums-outline"></ion-icon>
                         <span>Customize my Fit</span>
                     </a>
+                    <a href="{% url 'RemoveClothing' %}" class="dashboard-button">
+                        <ion-icon name="trash-outline"></ion-icon>
+                        <span>Remove Clothing</span>
+                    </a>
+                    <a href="{% url 'RemoveCloset' %}" class="dashboard-button">
+                        <ion-icon name="trash-outline"></ion-icon>
+                        <span>Remove Closet</span>
+                    </a>
+                    <a href="{% url 'RemoveOutfit' %}" class="dashboard-button">
+                        <ion-icon name="trash-outline"></ion-icon>
+                        <span>Remove Outfit</span>
+                    </a>
                 </div>
             {% else %}
                 <h1>Welcome to Smart Home Closet</h1>

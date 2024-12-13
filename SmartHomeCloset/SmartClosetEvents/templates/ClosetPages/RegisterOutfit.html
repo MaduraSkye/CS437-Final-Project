@@ -13,52 +13,66 @@
             <!-- Your SVG logo content here -->
         </svg>
         
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            
+        <div class="remove-container">
+            <h1>Register Outfit</h1>
+
             {% if messages %}
-                <div class="error-messages">
-                    {% for message in messages %}
-                        <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endif %}
 
-            <div class="input-field">
-                <label for="outfit_name">Outfit Name</label>
-                <div class="sec-2">
-                    <ion-icon name="shirt-outline"></ion-icon>
-                    <input type="text" name="outfit_name" id="outfit_name" placeholder="Summer Casual" required/>
+            <form method="POST" class="remove-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="input-field">
+                    <label for="outfit_name">Outfit Name</label>
+                    <div class="sec-2">
+                        <ion-icon name="shirt-outline"></ion-icon>
+                        <input type="text" name="outfit_name" id="outfit_name" placeholder="Summer Casual" required/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="input-field">
-                <label for="outfit_pic">Outfit Picture</label>
-                <div class="sec-2">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <input type="file" name="outfit_pic" id="outfit_pic" accept="image/*" required/>
+                <div class="input-field">
+                    <label for="outfit_pic">Outfit Picture</label>
+                    <div class="sec-2">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <input type="file" name="outfit_pic" id="outfit_pic" accept="image/*" required/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="input-field">
-                <label for="clothing_items">Select Clothing Items</label>
-                <div class="sec-2">
-                    <ion-icon name="list-outline"></ion-icon>
-                    <select name="clothing_items" id="clothing_items" multiple required>
+                <div class="items-selection">
+                    <label>Select Clothing Items</label>
+                    <div class="items-grid">
                         {% for item in clothing_items %}
-                            <option value="{{ item.clothing_item_id }}">{{ item.clothing_item_name }}</option>
+                            <button type="button" class="item-button" data-id="{{ item.clothing_item_id }}">
+                                <ion-icon name="shirt-outline"></ion-icon>
+                                {{ item.clothing_item_name }}
+                            </button>
+                            <input type="checkbox" name="clothing_items" value="{{ item.clothing_item_id }}" style="display: none;">
                         {% endfor %}
-                    </select>
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit" class="login">Register Outfit</button>
+                <button type="submit" class="login">Register Outfit</button>
+            </form>
+
             <div class="footer">
                 <a href="{% url 'homepage' %}">Back to Dashboard</a>
             </div>
-        </form>
+        </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.item-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const checkbox = document.querySelector(`input[value="${this.dataset.id}"]`);
+                checkbox.checked = this.classList.contains('selected');
+            });
+        });
+    </script>
 </body>
 </html> 
