@@ -41,31 +41,41 @@ def register_clothing(request):
     
     if request.method == "POST":
         try:
-            # Create closet status entry
-            closet = ClosetInfo.objects.get(closet_id=request.POST['closet_id'])
-            status = ClosetStatus(
-                user=request.user,
-                closet=closet,
-                clothing_item=new_clothing,
-                hanger_number=request.POST['hanger_number'],
-                in_closet=True
-            )
-            status.save()
+            # Get the selected closet and hanger number from the form
+            closet_id = request.POST['closet_id']
+            hanger_number = request.POST['hanger_number']
             
-            # Create new clothing item (removed file_path)
+            # Check if the hanger number is already registered for the selected closet
+            closet = ClosetInfo.objects.get(closet_id=closet_id, user=request.user)
+            existing_status = ClosetStatus.objects.filter(closet=closet, hanger_number=hanger_number).first()
+            
+            if existing_status:
+                messages.error(request, "Hanger number is already taken for this closet. Please choose a different hanger number.")
+                return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
+
+            # Create new clothing item
             new_clothing = ClothingItem(
                 user=request.user,
                 clothing_item_name=request.POST['clothing_name']
             )
-            new_clothing.save()
+            new_clothing.save()  # Save the clothing item to the database
+            
+            # Now create closet status entry
+            status = ClosetStatus(
+                user=request.user,
+                closet=closet,
+                clothing_item=new_clothing,
+                hanger_number=hanger_number,
+                in_closet=True
+            )
+            status.save()
             
             messages.success(request, "Clothing item registered successfully!")
             return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
         
         except Exception as e:
             if "duplicate key value" in str(e):
-                messages.error(request, "Hanger is Already taken by another Clothing Item.\
-                               Please remove the clothing item, or specify a new hanger.")
+                messages.error(request, "Hanger is already taken by another Clothing Item. Please remove the clothing item, or specify a new hanger.")
             else:
                 messages.error(request, f"Error registering clothing: {str(e)}")
             return render(request, 'ClosetPages/RegisterClothing.html', {'closets': user_closets})
