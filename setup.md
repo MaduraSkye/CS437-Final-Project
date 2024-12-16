@@ -67,6 +67,7 @@ sudo apt upgrade -y
 
    ```plaintext
    host    all             all             192.168.1.0/24          md5
+   host    all             all             127.0.0.1/32          md5
    ```
 
    This line allows all users to connect to all databases from any IP address in the `192.168.1.0/24` subnet using password authentication.
