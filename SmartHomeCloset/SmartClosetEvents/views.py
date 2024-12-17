@@ -100,7 +100,6 @@ def get_outfits(request, closet_id):
             closet=closet,
             in_closet=False
         ).values_list('clothing_item_id', flat=True)
-        
         if picked_items:
             # Get all outfits that contain ANY of the picked items
             potential_outfits = OutfitInfo.objects.filter(
@@ -119,7 +118,7 @@ def get_outfits(request, closet_id):
             affected_outfits = potential_outfits.exclude(outfit_id__in=[o.outfit_id for o in available_outfits])
         else:
             # If no items are picked out, show all outfits as available
-            available_outfits = OutfitInfo.objects.filter(user=request.user)
+            available_outfits = []
             affected_outfits = []
         
         # Store the current state in the session
